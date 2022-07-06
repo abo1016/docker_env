@@ -1,0 +1,46 @@
+version: "3"
+services:
+  # 商户平台接口服务
+  app_merchant_doc:
+    container_name: app_merchant_doc
+    image: hub.c.163.com/library/nginx:latest
+    volumes:
+      - ${APP_MERCHANT_API_DOCUMENT_DIRECTORY}:/usr/share/nginx/html:ro
+    ports:
+      - ${APP_MERCHANT_DOC_HTTP_PORT}:80
+    restart: always
+
+  # 中间层接口服务
+  app_middle_doc:
+    container_name: app_middle_doc
+    image: hub.c.163.com/library/nginx:latest
+    volumes:
+      - ${APP_MIDDLE_API_DOCUMENT_DIRECTORY}:/usr/share/nginx/html:ro
+    ports:
+      - ${APP_MIDDLE_DOC_HTTP_PORT}:80
+    restart: always
+
+  # 积分体系接口服务
+  app_point_doc:
+    container_name: app_point_doc
+    image: hub.c.163.com/library/nginx:latest
+    volumes:
+      - ${APP_POINT_API_DOCUMENT_DIRECTORY}:/usr/share/nginx/html:ro
+    ports:
+      - ${APP_POINT_DOC_HTTP_PORT}:80
+    restart: always
+
+  # 商家助手接口服务
+  app_mp_micro_doc:
+    container_name: app_mp_micro_doc
+    image: hub.c.163.com/library/nginx:latest
+    volumes:
+      - ${APP_MP_MICRO_API_DOCUMENT_DIRECTORY}:/usr/share/nginx/html:ro
+    ports:
+      - ${APP_MP_MICRO_DOC_HTTP_PORT}:80
+    restart: always
+
+networks:
+  default:
+    external:
+      name: dev-network

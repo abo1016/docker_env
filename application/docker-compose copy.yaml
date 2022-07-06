@@ -1,0 +1,225 @@
+version: "3"
+services:
+  # 商户平台接口服务
+  app_merchant_api:
+    container_name: app_merchant_api
+    image: 4bopop/runtime:v1.1
+    environment:
+      PHP_IDE_CONFIG: "serverName=mp-api"
+      NL_APP_NAME: app_merchant_api
+      NL_APP_ENV: ${APP_MERCHANT_API_ENV:-develop}
+    volumes:
+      - ${APP_MERCHANT_API_SOURCE_DIRECTORY}:/var/www/app
+      - ./srv/common/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./srv/common/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./srv/common/php/php.ini:/etc/php7/conf.d/php.ini:ro
+      - ./srv/common/php/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+      - ./srv/common/php/yasd.ini:/etc/php7/conf.d/yasd.ini:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - ${APP_MERCHANT_API_HTTP_PORT:-8601}:80
+    expose:
+      - 9011
+    restart: always
+
+  # 中间层接口服务
+  app_middle_api:
+    container_name: app_middle_api
+    image: alicfeng/newlink_php7.2_runtime_alpine:develop
+    environment:
+      NL_APP_NAME: app_middle_tier
+      NL_APP_ENV: ${APP_MIDDLE_API_ENV:-develop}
+    volumes:
+      - ${APP_MIDDLE_API_SOURCE_DIRECTORY}:/var/www/app
+      - ./srv/common/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./srv/common/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./srv/common/php/php.ini:/etc/php7/conf.d/php.ini:ro
+      - ./srv/common/php/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - ${APP_MIDDLE_API_HTTP_PORT:-12000}:80
+    restart: always
+
+  # 商城积分接口服务
+  # app_point_api:
+  #   container_name: app_point_api
+  #   image: alicfeng/newlink_php7.2_runtime_alpine:develop
+  #   environment:
+  #     NL_APP_NAME: app_point
+  #     NL_APP_ENV: ${APP_POINT_API_ENV:-develop}
+  #   volumes:
+  #     - ${APP_POINT_API_SOURCE_DIRECTORY}:/var/www/app
+  #     - ./srv/common/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+  #     - ./srv/common/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./srv/common/php/php.ini:/etc/php7/conf.d/php.ini:ro
+  #     - ./srv/common/php/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+  #     - /etc/localtime:/etc/localtime:ro
+  #   ports:
+  #     - ${APP_POINT_API_HTTP_PORT:-8603}:80
+  #   restart: always
+
+    # 商户助手接口服务
+  # app_mp_micro_api:
+  #   container_name: app_mp_micro_api
+  #   image: alicfeng/newlink_php7.2_runtime_alpine:develop
+  #   environment:
+  #     NL_APP_NAME: app_mp_micro_api
+  #     NL_APP_ENV: ${APP_MP_MICRO_API_ENV:-develop}
+  #   volumes:
+  #     - ${APP_MP_MICRO_API_SOURCE_DIRECTORY}:/var/www/app
+  #     - ./srv/common/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+  #     - ./srv/common/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./srv/common/php/php.ini:/etc/php7/conf.d/php.ini:ro
+  #     - ./srv/common/php/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+  #     - /etc/localtime:/etc/localtime:ro
+  #   ports:
+  #     - ${APP_MP_MICRO_API_HTTP_PORT:-8604}:80
+  #   restart: always
+
+    # POS平台接口服务
+  # app_pos_platform_api:
+  #   container_name: app_pos_platform_api
+  #   image: alicfeng/newlink_php7.2_runtime_alpine:develop
+  #   environment:
+  #     NL_APP_NAME: app_pos_platform
+  #     NL_APP_ENV: ${APP_POS_PLATFORM_API_ENV:-develop}
+  #   volumes:
+  #     - ${APP_POS_PLATFORM_API_SOURCE_DIRECTORY}:/var/www/app
+  #     - ./srv/common/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+  #     - ./srv/common/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./srv/common/php/php.ini:/etc/php7/conf.d/php.ini:ro
+  #     - ./srv/common/php/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+  #     - /etc/localtime:/etc/localtime:ro
+  #   ports:
+  #     - ${APP_POS_PLATFORM_API_HTTP_PORT:-8605}:80
+  #   restart: always
+
+ # 油站平台接口服务
+    app_mc_mechant_api:
+      container_name: app_mc_mechant_api
+      image: alicfeng/newlink_php7.2_runtime_alpine:develop
+      environment:
+        NL_APP_NAME: app_merchant
+        NL_APP_ENV: ${APP_MC_MERCHANT_API_ENV:-develop}
+      volumes:
+        - ${APP_MC_MERCHANT_API_SOURCE_DIRECTORY}:/var/www/app
+        - ./srv/common/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+        - ./srv/common/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+        - ./srv/common/php/php.ini:/etc/php7/conf.d/php.ini:ro
+        - ./srv/common/php/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+        - /etc/localtime:/etc/localtime:ro
+      ports:
+        - ${APP_MC_MERCHANT_API_HTTP_PORT:-8605}:80
+      restart: always
+
+  # # 营销系统接口服务
+  # app_market_api:
+  #   container_name: app_market_api
+  #   image: alicfeng/newlink_php7.2_runtime_alpine:develop
+  #   environment:
+  #     NL_APP_NAME: app_market
+  #     NL_APP_ENV: ${APP_MARKET_API_ENV:-develop}
+  #   volumes:
+  #     - ${APP_MARKET_API_SOURCE_DIRECTORY}:/var/www/app
+  #     - ./srv/common/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+  #     - ./srv/common/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./srv/common/php/php.ini:/etc/php7/conf.d/php.ini:ro
+  #     - ./srv/common/php/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+  #     - /etc/localtime:/etc/localtime:ro
+  #   ports:
+  #     - ${APP_MARKET_API_HTTP_PORT:-8606}:80
+  #   restart: always
+
+  # 鹰眼系统接口服务
+  app_yingyan_api:
+    container_name: app_yingyan_api
+    image: alicfeng/newlink_php7.2_runtime_alpine:develop
+    environment:
+      NL_APP_NAME: app_yingyan
+      NL_APP_ENV: ${APP_YINGYAN_API_ENV:-develop}
+    volumes:
+      - ${APP_YINGYAN_API_SOURCE_DIRECTORY}:/var/www/app
+      - ./srv/common/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./srv/common/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./srv/common/php/php.ini:/etc/php7/conf.d/php.ini:ro
+      - ./srv/common/php/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - ${APP_YINGYAN_API_HTTP_PORT:-8607}:80
+    restart: always
+
+  # 交易系统接口服务
+  # app_trade_api:
+  #   container_name: app_trade_api
+  #   image: alicfeng/newlink_php7.2_runtime_alpine:develop
+  #   environment:
+  #     NL_APP_NAME: app_trade
+  #     NL_APP_ENV: ${APP_TRADE_API_ENV:-develop}
+  #   volumes:
+  #     - ${APP_TRADE_API_SOURCE_DIRECTORY}:/var/www/app
+  #     - ./srv/common/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+  #     - ./srv/common/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./srv/common/php/php.ini:/etc/php7/conf.d/php.ini:ro
+  #     - ./srv/common/php/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+  #     - /etc/localtime:/etc/localtime:ro
+  #   ports:
+  #     - ${APP_TRADE_API_HTTP_PORT:-8608}:80
+  #   restart: always
+
+  # # 交易系统接口服务
+  # app_push_center:
+  #   container_name: app_push_center
+  #   image: alicfeng/newlink_php7.2_runtime_alpine:develop
+  #   environment:
+  #     NL_APP_NAME: app_push_center
+  #     NL_APP_ENV: ${APP_PUSH_CENTER:-develop}
+  #   volumes:
+  #     - ${APP_PUSH_CENTER_SOURCE_DIRECTORY}:/var/www/app
+  #     - ./srv/common/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+  #     - ./srv/common/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./srv/common/php/php.ini:/etc/php7/conf.d/php.ini:ro
+  #     - ./srv/common/php/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+  #     - /etc/localtime:/etc/localtime:ro
+  #   ports:
+  #     - ${APP_PUSH_CENTER_HTTP_PORT:-8608}:80
+  #   restart: always
+
+# 队列服务
+  app_queue:
+    container_name: app_queue
+    image: alicfeng/newlink_php7.2_runtime_alpine:develop
+    environment:
+      NL_APP_NAME: app_queue
+      NL_APP_ENV: ${APP_QUEUE:-develop}
+    volumes:
+      - ${APP_QUEUE_API_SOURCE_DIRECTOR}:/var/www/app
+      - ./srv/common/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./srv/common/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./srv/common/php/php.ini:/etc/php7/conf.d/php.ini:ro
+      - ./srv/common/php/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - ${APP_QUEUE_HTTP_PORT:-8608}:80
+    restart: always
+
+  # 队列服务
+  pos_api:
+    container_name: pos_api
+    image: alicfeng/newlink_php7.2_runtime_alpine:develop
+    environment:
+      NL_APP_NAME: pos_api
+      NL_APP_ENV: ${POS_API:-develop}
+    volumes:
+      - ${POS_API_SOURCE_DIRECTOR}:/var/www/app
+      - ./srv/common/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./srv/common/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./srv/common/php/php.ini:/etc/php7/conf.d/php.ini:ro
+      - ./srv/common/php/xdebug.ini:/etc/php7/conf.d/xdebug.ini:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - ${POS_API_HTTP_PORT:-8608}:80
+    restart: always
+networks:
+  default:
+    external:
+      name: dev-network

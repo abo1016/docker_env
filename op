@@ -1,0 +1,37 @@
+#! /bin/bash
+
+echo -e "
+1. mp-api\n 
+2. pos_api\n 
+3. MiddleTier\n
+4. trade\n
+5. payment\n
+6. user\n
+7. yingyan\n
+8. library\n
+9. pos_os_api\n
+"
+
+read -t 30 -p "Enter the item number to be opened": number
+cd ~/local/code/;
+pstorm=/usr/local/bin/pstorm
+case $number in
+1 | map-api) pstorm mp-api
+;;
+2 | pos_api) pstorm pos_api
+;;
+3 | MiddleTier) pstorm MiddleTier
+;;
+4 | trade) pstorm trade
+;;
+5 | payment) pstorm payment
+;;
+6 | user) pstorm user
+;;
+7 | yingyan-api) pstorm yingyan-api
+;;
+8 | os_os_api) pstorm pos_os_api
+;;
+*) echo "Please enter the above list out of the option"
+;;
+esac

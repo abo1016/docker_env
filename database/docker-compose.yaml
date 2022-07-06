@@ -1,0 +1,47 @@
+version: "3"
+services:
+  mysql:
+    container_name: mysql
+    platform: linux/x86_64
+    image: mysql:${MYSQL_VERSION:-5.7}
+    ports:
+      - ${MYSQL_PORT}:3306
+    volumes:
+      - ./.data/mysql:/var/lib/mysql
+      - ./srv/mysql/config/my.cnf:/etc/mysql/my.cnf:ro
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    restart: always
+
+  redis:
+    container_name: redis
+    image: redis:${REDIS_VERSION:-5}
+    ports:
+      - ${REDIS_PORT}:6379
+    volumes:
+      - ./.data/redis:/data
+      - ./srv/redis/redis.conf:/etc/redis/redis.conf:ro
+    restart: always
+
+  mongodb:
+    container_name: "mongodb"
+    image: mongo:latest
+    environment:
+      MONGO_DATA_DIR: /data/db
+      MONGO_LOG_DIR: /data/logs
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    ports:
+      - ${MONGO_PORT:-27017}:27017
+    volumes:
+      - ./.data/mongodb/data:/data/db
+      - ./.data/mongodb/logs:/data/logs
+    restart: always
+
+networks:
+  default:
+    external:
+      name: dev-network

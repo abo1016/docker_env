@@ -1,0 +1,32 @@
+FROM alicfeng/newlink_fpm7.2_alpine:1.0.4
+LABEL Maintainer="AlicFeng <a@samego.com>" \
+      Description="LNP container with Nginx as well as FPM7.2 based on Alpine"
+
+# crontab
+COPY crontab/default /var/spool/cron/crontabs/
+
+# install dependent app including nginx,supervisor,cron
+RUN apk --no-cache add \
+        nginx \
+        nginx-mod-http-perl \
+        supervisor  \
+    # configuration for application
+    && mkdir -p /run/nginx /var/log/cron /var/log/supervisor \
+    && chown -R www.www /run /var/lib/nginx /var/tmp/nginx /var/www/ /var/log  \
+    && cat /var/spool/cron/crontabs/default >> /var/spool/cron/crontabs/www \
+    # clean
+    && rm -rf /tmp/* /var/cache/apk/*
+
+# configure supervisord
+COPY supervisor /etc/supervisor
+COPY supervisor/supervisord.conf /etc/supervisord.conf
+
+# configure nginx
+COPY nginx/conf.d/ /etc/nginx/conf.d/
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+
+# expose port
+EXPOSE 80 443
+
+# docker start container command
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
